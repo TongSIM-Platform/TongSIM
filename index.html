@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TongSIM: A General Platform for Simulating Intelligent Machines</title>
+    
+    <!-- 引入学术模板所需的样式表 -->
+    <link rel="stylesheet" href="static/css/bulma.min.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+    
+    <style>
+        /* --- 保留并微调原有的全局样式，确保与 Bulma 兼容 --- */
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;600;700&family=Roboto+Mono&display=swap');
+
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            line-height: 1.6;
+            color: #222;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+        }
+
+        .container.is-custom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px 60px 20px;
+        }
+
+        /* 覆盖 Bulma 对原有 section 的影响 */
+        section { margin-bottom: 40px; padding: 0 20px; }
+        
+        .hero-body {
+            padding-bottom: 1rem !important;
+        }
+
+        .publication-title {
+            font-size: 3.7rem !important;
+            font-weight: 850 !important;
+            line-height: 1.2;
+            margin-bottom: 4rem !important;
+        }
+
+        .publication-authors {
+            font-size: 1.6rem !important;
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-links .button {
+            font-size: 1.6rem !important;
+            padding: 0.7rem 1.8rem !important;
+            height: auto !important;
+            border-radius: 30px !important;
+        }
+        
+        .section-title { 
+            font-family: 'Google Sans', sans-serif;
+            font-size: 2.8rem; 
+            font-weight: 700; 
+            text-align: center; 
+            margin-bottom: 40px; 
+            color: #202124; 
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: #1967d2;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        p { text-align: justify; margin-bottom: 1.5em; font-size: 1.4rem; color: #333; }
+
+        /* --- 作者链接样式：蓝色 + 红色下划线动画 --- */
+        .author-block a {
+            color: #2563eb !important;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 2px;
+            font-weight: 600;
+        }
+        .author-block a:hover {
+            text-decoration: none;
+        }
+        .author-block a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, #ff3366, #ff6b6b);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+        }
+        .author-block a:hover::after,
+        .author-block a:focus::after,
+        .author-block a:active::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        /* --- 其他原有样式保持不变 --- */
+        .teaser-video, .content-img { width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin: 0 auto 30px; display: block; }
+        .benchmark-fixed-height { height: 450px; width: auto; max-width: 100%; object-fit: contain; }
+
+        /* --- Sections --- */
+        section { margin-bottom: 80px; }
+        
+        p { 
+            text-align: justify; 
+            margin-bottom: 1.5em; 
+            font-size: 1.25rem; 
+            color: #333;
+            font-weight: 400;
+        }
+
+        /* --- Images & Video --- */
+        .teaser-video, .content-img { 
+            width: 100%; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            margin: 0 auto 30px;
+            display: block;
+        }
+
+        .benchmark-fixed-height {
+            height: 450px;
+            width: auto;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        /* --- Feature Grids --- */
+        .features-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            margin-top: 40px; 
+            margin-bottom: 60px;
+            align-items: start; /* Prevent cards from stretching to fill height if content varies */
+        }
+        .feature-card { 
+            background: #fff; 
+            padding: 30px 25px; /* Reduced padding */
+            border-radius: 20px; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+            /* height: 100%; Removed to allow card to shrink */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .feature-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            border-color: transparent;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #1967d2, #8ab4f8);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon-wrapper {
+            width: 70px; /* Slightly smaller */
+            height: 70px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px; /* Reduced margin */
+            font-size: 2.2rem; /* Slightly smaller icon */
+            color: #1967d2;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon-wrapper {
+            background: #e8f0fe;
+            transform: scale(1.1);
+        }
+
+        .feature-card h3 { 
+            font-family: 'Google Sans', sans-serif;
+            margin-top: 0; 
+            font-size: 1.7rem; 
+            margin-bottom: 15px; /* Reduced margin */
+            color: #202124;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .feature-card ul { 
+            padding-left: 0; 
+            margin: 0; 
+            color: #444; 
+            font-size: 1.3rem; 
+            list-style: none;
+            width: 100%;
+            font-weight: 500;
+        }
+        
+        .feature-card li { 
+            margin-bottom: 10px; /* Reduced margin */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .highlight-number {
+            color: #1967d2;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+
+        /* --- Comparison Table --- */
+        .comparison-table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            background: #fff;
+            padding: 0;
+            border: 1px solid #f0f0f0;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+            color: #333;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 10px 16px;
+            text-align: center;
+            border: none;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        /* Header Styles */
+        .comparison-table thead th {
+            background-color: #fff;
+            font-weight: 600;
+            color: #202124;
+            border-bottom: 2px solid #f0f0f0;
+            vertical-align: middle;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        /* First Column: Category */
+        .comparison-table .category-cell {
+            font-weight: 600;
+            text-align: left;
+            color: #202124;
+            width: 120px;
+            padding-left: 24px;
+        }
+
+        /* Second Column: Feature Name */
+        .comparison-table .feature-name {
+            text-align: left;
+            color: #5f6368;
+            width: 200px;
+        }
+
+        /* TongSIM Column Styling */
+        .comparison-table .highlight-col {
+            background-color: #f4f8ff;
+            color: #1967d2;
+            font-weight: 600;
+        }
+        
+        .comparison-table th.highlight-col {
+            background-color: #f4f8ff;
+            color: #1967d2;
+            border-bottom: 2px solid #d2e3fc;
+        }
+        
+        /* Category Group Separators */
+        .group-end td {
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* Remove bottom border for last row */
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Icons */
+        .check { color: #1e8e3e; font-weight: bold; font-size: 1.1em; } 
+        .cross { color: #ea4335; font-weight: bold; font-size: 1.1em; opacity: 0.7; }
+        
+        /* Hover */
+        .comparison-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+        .comparison-table tbody tr:hover .highlight-col {
+            background-color: #eef4ff;
+        }
+
+        /* --- Benchmark Tabs --- */
+        .tabs-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab-btn { 
+            background: #f1f3f4; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 24px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            color: #5f6368; 
+            transition: all 0.2s; 
+            font-family: 'Google Sans', sans-serif;
+            font-size: 1.25rem;
+        }
+        .tab-btn.active, .tab-btn:hover { 
+            background: #202124; 
+            color: #fff; 
+        }
+        .tab-content { 
+            display: none; 
+            background: #fff; 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            border: 1px solid #eee; 
+            animation: fadeIn 0.4s ease; 
+        }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Citation --- */
+        .bibtex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .copy-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+            font-family: 'Google Sans', sans-serif;
+            font-size: 0.9rem;
+        }
+        
+        .copy-btn:hover {
+            background-color: #1557b0;
+        }
+
+        .citation-block { 
+            background: #f6f8fa; 
+            padding: 20px; 
+            border-radius: 8px; 
+            font-family: 'Roboto Mono', monospace; 
+            font-size: 0.9rem; 
+            white-space: pre-wrap; 
+            overflow-x: auto; 
+            border: 1px solid #d0d7de; 
+            color: #24292f;
+            line-height: 1.6;
+        }
+        
+        /* --- Footer --- */
+        footer { 
+            text-align: center; 
+            margin-top: 80px; 
+            padding: 40px 20px; 
+            color: #5f6368; 
+            border-top: 1px solid #eee; 
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 使用 new_index.html 的 Hero 样式 -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-fullhd">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">TongSIM: A General Platform for Simulating<br>Intelligent Machines</h1>
+          
+          <div class="is-size-5 publication-authors" style="margin-bottom: 1.5rem;">
+            <span class="author-block"><a href="#">Zhe Sun</a>,</span>
+            <span class="author-block"><a href="#">Kunlun Wu</a>,</span>
+            <span class="author-block"><a href="#">Chuanjian Fu</a>,</span>
+            <span class="author-block"><a href="#">Zeming Song</a>,</span>
+            <span class="author-block"><a href="#">Langyong Shi</a>,</span>
+            <span class="author-block"><a href="#">Zihe Xue</a>,</span>
+            <span class="author-block"><a href="#">Bohan Jing</a>,</span>
+            <span class="author-block"><a href="#">Ying Yang</a>,</span>
+            <span class="author-block"><a href="#">Xiaomeng Gao</a>,</span>
+            <span class="author-block"><a href="#">Aijia Li</a>,</span>
+            <span class="author-block"><a href="#">Tianyu Guo</a>,</span>
+            <span class="author-block"><a href="#">Huiying Li</a>,</span>
+            <span class="author-block"><a href="#">Xueyuan Yang</a>,</span>
+            <span class="author-block"><a href="#">Rongkai Liu</a>,</span>
+            <span class="author-block"><a href="#">Xinyi He</a>,</span>
+            <span class="author-block"><a href="#">Yuxi Wang</a>,</span>
+            <span class="author-block"><a href="#">Yue Li</a>,</span>
+            <span class="author-block"><a href="#">Mingyuan Liu</a>,</span>
+            <span class="author-block"><a href="#">Yujie Lu</a>,</span>
+            <span class="author-block"><a href="#">Hongzhao Xie</a>,</span>
+            <span class="author-block"><a href="#">Shiyun Zhao</a>,</span>
+            <span class="author-block"><a href="#">Bo Dai</a>,</span>
+            <span class="author-block"><a href="#">Wei Wang</a>,</span>
+            <span class="author-block"><a href="#">Tao Yuan</a>,</span>
+            <span class="author-block"><a href="#">Song-Chun Zhu</a>,</span>
+            <span class="author-block"><a href="#">Yujia Peng</a>,</span>
+            <span class="author-block"><a href="#">Zhenliang Zhang</a></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">State Key Laboratory of General Artificial Intelligence, BIGAI</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Paper Link -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link -->
+              <span class="link-block">
+                <a href="https://github.com/bigai-ai/tongsim" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+              <!-- Docs Link -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-book"></i></span>
+                  <span>Docs</span>
+                </a>
+              </span>
+              <!-- HF Link -->
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">🤗</span>
+                  <span>Hugging Face</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container is-custom">
+    <!-- 之后的内容保持不变 -->
+    <section>
+        <video class="teaser-video" autoplay muted loop playsinline poster="assets/teaser.jpg">
+            <source src="assets/teaser_video.mp4" type="video/mp4">
+        </video>
+    </section>
+
+    <section>
+        <h2 class="section-title">Abstract</h2>
+        <p>
+            As the capabilities of Artificial Intelligence (AI) continue to advance, the research focus is shifting from single-text modality to the more challenging domains of multimodal and embodied AI. However, most existing simulation platforms are designed for a limited task scope. 
+            To address this gap, this paper presents <strong>TongSIM</strong>, a high-fidelity, general-purpose platform for embodied agent training and testing. TongSIM constructs more than 100 diverse multi-room indoor scenarios alongside an open-ended, interaction-rich outdoor simulated town. 
+            Utilizing this rich environment, we designed a comprehensive evaluation system and proposed a series of benchmarks covering major agent capabilities. TongSIM aims to offer researchers a unified, powerful platform to accelerate General Embodied Intelligence.
+        </p>
+    </section>
+
+    <section>
+        <h2 class="section-title">System Architecture</h2>
+        <img src="assets/system_arch_01.png" alt="TongSIM System Architecture" class="content-img">
+        <p style="text-align: center; font-style: italic; color: #666; margin-top: -10px;">
+            <strong>Figure 1:</strong> Overview of the TongSIM System Architecture. The platform consists of a UE5-based simulator and a Python controller. It supports multimodal data sensors, high-fidelity simulation, large-scale NPC systems, and parallel training, integrated with a robust evaluation system.
+        </p>
+    </section>
+
+    <section>
+        <h2 class="section-title">Platform Capabilities</h2>
+        <div class="comparison-table-container">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="text-align: center;">Features</th>
+                        <th class="highlight-col">TongSIM<br>(Ours)</th>
+                        <th>GRUtopia</th>
+                        <th>OmniGibson</th>
+                        <th>Habitat</th>
+                        <th>VirtualHome</th>
+                        <th>Virtual Community</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Core -->
+                    <tr class="group-end">
+                        <td class="category-cell">Core</td>
+                        <td class="feature-name">Engine Base</td>
+                        <td class="highlight-col">UE 5</td>
+                        <td>Isaac Sim</td>
+                        <td>Isaac Sim</td>
+                        <td>Custom (C++)</td>
+                        <td>Unity3D</td>
+                        <td>Genesis</td>
+                    </tr>
+                    
+                    <!-- Environment & Scenes -->
+                    <tr>
+                        <td rowspan="4" class="category-cell">Environment<br>& Scenes</td>
+                        <td class="feature-name">Scene Categories</td>
+                        <td class="highlight-col">115</td>
+                        <td>~100 (Annotated)</td>
+                        <td>51 (8 Types)</td>
+                        <td>211</td>
+                        <td>6 Homes</td>
+                        <td>35 Urban Areas</td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Indoor Scope</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Outdoor Scope</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr class="group-end">
+                        <td class="feature-name">City-level Interaction</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+
+                    <!-- Platform Features -->
+                    <tr>
+                        <td rowspan="5" class="category-cell">Platform<br>Features</td>
+                        <td class="feature-name">Parallel Training</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Task-oriented fidelity</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">NPC Control</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Voxelized Annotation</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                    </tr>
+                    <tr class="group-end">
+                        <td class="feature-name">Sim-to-Real Support</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+
+                    <!-- Supported Tasks -->
+                    <tr>
+                        <td rowspan="3" class="category-cell">Supported<br>Tasks</td>
+                        <td class="feature-name">Single-Agent</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Multi-Agent</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                    <tr>
+                        <td class="feature-name">Human-Robot Teaming</td>
+                        <td class="highlight-col"><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                        <td><span class="cross">✘</span></td>
+                        <td><span class="check">✔</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="features-grid">
+            <!-- Card 1: Environments & Interaction -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">🏙️</div>
+                <h3>Scalable & Interactive Environments</h3>
+                <ul>
+                    <li><span class="highlight-number">115+</span> Diverse Scenes</li>
+                    <!-- <li><span class="highlight-number">3,000+</span> Interactive Objects</li> -->
+                    <li>Procedural Generation </li>
+                    <li> Asset Import</li>
+                </ul>
+            </div>
+
+            <!-- Card 2: Agents & Simulation -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">🤖</div>
+                <h3>Universal Agent & Crowd Simulation</h3>
+                <ul>
+                    <li>Logic & LLM-Driven Agents</li>
+                    <li>Text-Driven Motion Generation</li>
+                    <li>Large-Scale Crowd Dynamics</li>
+                </ul>
+            </div>
+
+            <!-- Card 3: Performance & Training -->
+            <div class="feature-card">
+                <div class="feature-icon-wrapper">⚡</div>
+                <h3>Efficient Training & Sim2Real</h3>
+                <ul>
+                    <li>Multi-Env Parallel Training</li>
+                    <li>Near-Linear SPS Scaling</li>
+                    <li>Sim2Real (MuJoCo/Isaac Sim)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">Benchmark Gallery</h2>
+        
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="openTab(event, 'tab1')">Spatial Exploration</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">MACSR</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">Human-Robot Hybrid</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')">Household Tasks</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab5')">S³IT (Social)</button>
+        </div>
+
+        <div id="tab1" class="tab-content active">
+            <div style="text-align: center;">
+                <img src="assets/single_agent_bench.jpeg" alt="Spatial Exploration Task" class="content-img benchmark-fixed-height">
+                <h3 style="color: #007bff; margin-top: 10px;">Spatial Exploration and Navigation</h3>
+                <p style="font-style: italic; color: #555; max-width: 800px; margin: 0 auto;">
+                    A single-agent benchmark requiring autonomous navigation and obstacle avoidance to clean up scattered debris in complex multi-room indoor environments.
+                </p>
+            </div>
+        </div>
+
+        <div id="tab2" class="tab-content">
+            <div style="text-align: center;">
+                <img src="assets/MACSR.png" alt="MACSR Task" class="content-img benchmark-fixed-height">
+                <h3 style="color: #007bff; margin-top: 10px;">Multi-Agent Cooperative Search and Rescue (MACSR)</h3>
+                <p style="font-style: italic; color: #555; max-width: 800px; margin: 0 auto;">
+                    A multi-agent collaboration benchmark where agents collaborate to collect supplies while dodging dynamic hazards in a partially observable post-flood environment.
+                </p>
+            </div>
+        </div>
+
+        <div id="tab3" class="tab-content">
+            <div style="text-align: center;">
+                <img src="assets/HRI_bench.jpg" alt="Human-Robot Hybrid Task" class="content-img benchmark-fixed-height">
+                <h3 style="color: #007bff; margin-top: 10px;">Human-Robot Hybrid Scenario</h3>
+                <p style="font-style: italic; color: #555; max-width: 800px; margin: 0 auto;">
+                    A social navigation benchmark testing a robot's ability to move safely and socially compliantly through dense, dynamic human crowds in urban settings.
+                </p>
+            </div>
+        </div>
+
+        <div id="tab4" class="tab-content">
+            <div style="text-align: center;">
+                <img src="assets/basic_home_bench.jpg" alt="Household Tasks" class="content-img benchmark-fixed-height">
+                <h3 style="color: #007bff; margin-top: 10px;">Primary Family Composite Tasks</h3>
+                <p style="font-style: italic; color: #555; max-width: 800px; margin: 0 auto;">
+                    A comprehensive evaluation of MLLM-driven agents on diverse household activities spanning object understanding, spatial reasoning, and social interaction.
+                </p>
+            </div>
+        </div>
+
+        <div id="tab5" class="tab-content">
+            <div style="text-align: center;">
+                <img src="assets/s3it_bench.jpeg" alt="S3IT Task" class="content-img" style="max-width: 90%;">
+                <h3 style="color: #007bff; margin-top: 10px;">Spatially Situated Social Intelligence Test (S³IT)</h3>
+                <p style="font-style: italic; color: #555; max-width: 800px; margin: 0 auto;">
+                    A benchmark designed to evaluate Embodied Social Intelligence. It requires agents within 3D environments to engage in proactive dialogue with NPCs—characterized by complex preferences and social relationships—while conducting autonomous exploration to fulfill seating arrangement tasks under multi-objective constraints.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="citation">
+        <div class="bibtex-header">
+            <h2 class="section-title" style="margin-bottom: 0;">BibTeX</h2>
+            <button class="copy-btn" onclick="copyBibtex()">
+                <span>📋</span> Copy
+            </button>
+        </div>
+        <div class="citation-block" id="bibtex-content">
+@article{sun2025tongsim,
+  title={TongSIM: A General Platform for Simulating Intelligent Machines},
+  author={Sun, Zhe and Wu, Kunlun and ... Zhang, Zhenliang},
+  journal={Technical Report},
+  year={2025},
+  institution={State Key Laboratory of General Artificial Intelligence, BIGAI}
+}</div>
+    </section>
+
+    <footer>
+        <p>State Key Laboratory of General Artificial Intelligence, BIGAI</p>
+        <p>&copy; 2025 TongSIM Project Team</p>
+    </footer>
+
+</div>
+
+<script>
+    function copyBibtex() {
+        const content = document.getElementById('bibtex-content').innerText;
+        navigator.clipboard.writeText(content).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<span>✅</span> Copied!';
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+            }, 2000);
+        });
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        setTimeout(() => {
+            document.getElementById(tabName).classList.add("active");
+        }, 10);
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
